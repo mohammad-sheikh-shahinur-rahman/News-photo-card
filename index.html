@@ -103,6 +103,9 @@
       font-weight: bold;
       color: #666;
       font-size: 12px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .date-tag {
@@ -116,7 +119,7 @@
     }
 
     .card-image {
-      width: 100%;
+      width: calc(100% - 40px);
       height: 250px;
       background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
       display: flex;
@@ -125,9 +128,11 @@
       color: #666;
       font-size: 18px;
       font-weight: 500;
-      margin: 0 20px;
+      margin: 0 20px 20px 20px;
       border-radius: 12px;
-      margin-bottom: 20px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .card-content {
@@ -176,7 +181,7 @@
       color: var(--text-primary);
     }
 
-    .input-group input[type="text"] {
+    .input-group input[type="text"], .input-group input[type="url"] {
       width: 100%;
       padding: 12px 16px;
       border: 2px solid var(--border-color);
@@ -185,10 +190,44 @@
       transition: all 0.3s ease;
     }
 
-    .input-group input[type="text"]:focus {
+    .input-group input[type="text"]:focus, .input-group input[type="url"]:focus {
       outline: none;
       border-color: var(--brand-primary);
       box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .file-upload-wrapper {
+      margin-top: 10px;
+    }
+
+    .file-upload-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      background: #f8f9fa;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .file-upload-btn:hover {
+      border-color: var(--brand-primary);
+      background: #fef2f2;
+      color: var(--brand-primary);
+    }
+
+    .file-upload-btn.has-file {
+      border-color: var(--brand-primary);
+      background: var(--brand-primary);
+      color: white;
+      border-style: solid;
     }
 
     .color-picker-group {
@@ -341,40 +380,6 @@
       to { transform: rotate(360deg); }
     }
 
-    .file-upload-wrapper {
-      margin-top: 10px;
-    }
-
-    .file-upload-btn {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px dashed var(--border-color);
-      border-radius: 12px;
-      background: #f8f9fa;
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .file-upload-btn:hover {
-      border-color: var(--brand-primary);
-      background: #fef2f2;
-      color: var(--brand-primary);
-    }
-
-    .file-upload-btn.has-file {
-      border-color: var(--brand-primary);
-      background: var(--brand-primary);
-      color: white;
-      border-style: solid;
-    }
-
     /* Responsive Design */
     @media (max-width: 768px) {
       .main-content {
@@ -429,7 +434,7 @@
       <div class="card-preview">
         <div class="news-card" id="newsCard">
           <div class="card-header">
-            <div class="channel-logo">
+            <div class="channel-logo" id="channelLogo">
               আমাদের সমাজ
             </div>
             <div class="date-tag" id="dateTag">
@@ -446,7 +451,7 @@
           </div>
           
           <div class="card-footer">
-            <div class="website-link">
+            <div class="website-link" id="websiteLink">
               🌐 বিস্তারিত পড়ুন: amadersomaj.com
             </div>
           </div>
@@ -457,6 +462,11 @@
         <div class="input-group">
           <label for="headlineInput">📰 খবরের শিরোনাম</label>
           <input type="text" id="headlineInput" placeholder="আপনার খবরের শিরোনাম লিখুন..." value="এখানে আপনার খবরের শিরোনাম লিখুন">
+        </div>
+
+        <div class="input-group">
+          <label for="websiteInput">🌐 ওয়েবসাইট লিংক</label>
+          <input type="text" id="websiteInput" placeholder="ওয়েবসাইট লিংক লিখুন..." value="amadersomaj.com">
         </div>
 
         <div class="input-group">
@@ -471,7 +481,7 @@
 
         <div class="input-group">
           <label for="imageUrlInput">🔗 অথবা ছবির লিংক</label>
-          <input type="text" id="imageUrlInput" placeholder="ছবির URL পেস্ট করুন...">
+          <input type="url" id="imageUrlInput" placeholder="ছবির URL পেস্ট করুন...">
         </div>
 
         <div class="input-group">
@@ -486,7 +496,7 @@
 
         <div class="input-group">
           <label for="logoUrlInput">🔗 অথবা লোগোর লিংক</label>
-          <input type="text" id="logoUrlInput" placeholder="লোগোর URL পেস্ট করুন...">
+          <input type="url" id="logoUrlInput" placeholder="লোগোর URL পেস্ট করুন..." value="https://i.ibb.co/vxYQbwSV/file-4.png">
         </div>
 
         <div class="input-group">
@@ -539,7 +549,9 @@
   <script>
     // DOM Elements
     const headlineInput = document.getElementById('headlineInput');
+    const websiteInput = document.getElementById('websiteInput');
     const newsTitle = document.getElementById('newsTitle');
+    const websiteLink = document.getElementById('websiteLink');
     const fontSizeSlider = document.getElementById('fontSizeSlider');
     const fontSizeValue = document.getElementById('fontSizeValue');
     const colorOptions = document.querySelectorAll('.color-option');
@@ -549,6 +561,7 @@
     const logoUpload = document.getElementById('logoUpload');
     const logoUrlInput = document.getElementById('logoUrlInput');
     const cardImage = document.getElementById('cardImage');
+    const channelLogo = document.getElementById('channelLogo');
 
     // Image storage
     let currentImage = null;
@@ -556,6 +569,7 @@
 
     // Event Listeners
     headlineInput.addEventListener('input', updateHeadline);
+    websiteInput.addEventListener('input', updateWebsite);
     fontSizeSlider.addEventListener('input', updateFontSize);
     imageUpload.addEventListener('change', handleImageUpload);
     imageUrlInput.addEventListener('input', handleImageUrl);
@@ -571,6 +585,22 @@
     });
 
     // Functions
+    function updateHeadline() {
+      const headline = headlineInput.value || 'এখানে আপনার খবরের শিরোনাম লিখুন';
+      newsTitle.textContent = headline;
+    }
+
+    function updateWebsite() {
+      const website = websiteInput.value || 'amadersomaj.com';
+      websiteLink.textContent = `🌐 বিস্তারিত পড়ুন: ${website}`;
+    }
+
+    function updateFontSize() {
+      const size = fontSizeSlider.value;
+      fontSizeValue.textContent = size + 'px';
+      newsTitle.style.fontSize = size + 'px';
+    }
+
     function handleImageUpload(event) {
       const file = event.target.files[0];
       if (file) {
@@ -579,6 +609,7 @@
           currentImage = e.target.result;
           updateCardImage();
           updateUploadButton('imageUpload', file.name);
+          imageUrlInput.value = ''; // Clear URL input
         };
         reader.readAsDataURL(file);
       }
@@ -589,6 +620,8 @@
       if (url) {
         currentImage = url;
         updateCardImage();
+        imageUpload.value = ''; // Clear file input
+        resetUploadButton('imageUpload');
       } else {
         currentImage = null;
         updateCardImage();
@@ -603,6 +636,7 @@
           currentLogo = e.target.result;
           updateCardLogo();
           updateUploadButton('logoUpload', file.name);
+          logoUrlInput.value = ''; // Clear URL input
         };
         reader.readAsDataURL(file);
       }
@@ -613,6 +647,8 @@
       if (url) {
         currentLogo = url;
         updateCardLogo();
+        logoUpload.value = ''; // Clear file input
+        resetUploadButton('logoUpload');
       } else {
         currentLogo = null;
         updateCardLogo();
@@ -634,17 +670,16 @@
     }
 
     function updateCardLogo() {
-      const logoElement = document.querySelector('.channel-logo');
       if (currentLogo) {
-        logoElement.style.backgroundImage = `url(${currentLogo})`;
-        logoElement.style.backgroundSize = 'cover';
-        logoElement.style.backgroundPosition = 'center';
-        logoElement.textContent = '';
+        channelLogo.style.backgroundImage = `url(${currentLogo})`;
+        channelLogo.style.backgroundSize = 'cover';
+        channelLogo.style.backgroundPosition = 'center';
+        channelLogo.textContent = '';
       } else {
-        logoElement.style.backgroundImage = '';
-        logoElement.style.backgroundSize = '';
-        logoElement.style.backgroundPosition = '';
-        logoElement.textContent = 'আমাদের সমাজ';
+        channelLogo.style.backgroundImage = '';
+        channelLogo.style.backgroundSize = '';
+        channelLogo.style.backgroundPosition = '';
+        channelLogo.textContent = 'আমাদের সমাজ';
       }
     }
 
@@ -656,15 +691,16 @@
       }
     }
 
-    function updateHeadline() {
-      const headline = headlineInput.value || 'এখানে আপনার খবরের শিরোনাম লিখুন';
-      newsTitle.textContent = headline;
-    }
-
-    function updateFontSize() {
-      const size = fontSizeSlider.value;
-      fontSizeValue.textContent = size + 'px';
-      newsTitle.style.fontSize = size + 'px';
+    function resetUploadButton(uploadId) {
+      const button = document.querySelector(`button[onclick*="${uploadId}"]`);
+      if (button) {
+        button.classList.remove('has-file');
+        if (uploadId === 'imageUpload') {
+          button.innerHTML = '<i class="fas fa-upload"></i> ছবি আপলোড করুন';
+        } else {
+          button.innerHTML = '<i class="fas fa-upload"></i> লোগো আপলোড করুন';
+        }
+      }
     }
 
     function updateBrandColor(color) {
@@ -715,7 +751,6 @@
       button.disabled = true;
 
       try {
-        // Create canvas-based download
         createCanvasFromCard().then(canvas => {
           const link = document.createElement('a');
           const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
@@ -763,66 +798,87 @@
         const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim();
         const brandSecondary = getComputedStyle(document.documentElement).getPropertyValue('--brand-secondary').trim();
         
-        // Draw card background
+        // Draw card background with rounded corners
         ctx.fillStyle = '#f8f9fa';
-        ctx.fillRect(0, 0, rect.width, rect.height);
+        ctx.beginPath();
+        ctx.roundRect(0, 0, rect.width, rect.height, 20);
+        ctx.fill();
         
-        // Function to draw image
-        const drawImage = (imageSrc, x, y, width, height, isRounded = false) => {
+        // Function to load and draw image
+        const loadAndDrawImage = (src, x, y, width, height, radius = 0) => {
           return new Promise((resolve) => {
-            if (!imageSrc) {
+            if (!src) {
               resolve();
               return;
             }
             
             const img = new Image();
             img.crossOrigin = 'anonymous';
+            
             img.onload = () => {
               ctx.save();
-              if (isRounded) {
+              if (radius > 0) {
                 ctx.beginPath();
-                ctx.roundRect(x, y, width, height, 12);
+                ctx.roundRect(x, y, width, height, radius);
                 ctx.clip();
               }
               ctx.drawImage(img, x, y, width, height);
               ctx.restore();
               resolve();
             };
-            img.onerror = () => resolve();
-            img.src = imageSrc;
+            
+            img.onerror = () => {
+              console.log('Image failed to load:', src);
+              resolve();
+            };
+            
+            // Handle data URLs and regular URLs
+            if (src.startsWith('data:')) {
+              img.src = src;
+            } else {
+              // For external URLs, try to load directly
+              img.src = src;
+            }
           });
         };
         
-        // Draw all elements
+        // Draw all elements sequentially
         Promise.all([
-          // Draw logo
-          currentLogo ? drawImage(currentLogo, 20, 20, 80, 80, true) : Promise.resolve(),
-          // Draw main image
-          currentImage ? drawImage(currentImage, 20, 120, rect.width - 40, 250, true) : Promise.resolve()
+          loadAndDrawImage(currentLogo, 20, 20, 80, 80, 12),
+          loadAndDrawImage(currentImage, 20, 120, rect.width - 40, 250, 12)
         ]).then(() => {
-          // Draw logo background if no logo
+          // Draw logo background if no logo loaded
           if (!currentLogo) {
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(20, 20, 80, 80);
+            ctx.beginPath();
+            ctx.roundRect(20, 20, 80, 80, 12);
+            ctx.fill();
             ctx.fillStyle = '#666666';
-            ctx.font = '12px Arial';
+            ctx.font = 'bold 12px Arial';
             ctx.textAlign = 'center';
-            ctx.fillText('আমাদের সমাজ', 60, 65);
+            ctx.fillText('আমাদের', 60, 55);
+            ctx.fillText('সমাজ', 60, 75);
           }
           
           // Draw date tag
           ctx.fillStyle = brandColor;
-          ctx.fillRect(rect.width - 150, 20, 120, 35);
+          ctx.beginPath();
+          ctx.roundRect(rect.width - 150, 20, 120, 35, 8);
+          ctx.fill();
           ctx.fillStyle = '#ffffff';
-          ctx.font = '14px Arial';
+          ctx.font = 'bold 14px Arial';
+          ctx.textAlign = 'center';
           ctx.fillText('১৫ জুলাই, ২০২৫', rect.width - 90, 42);
           
           // Draw image placeholder if no image
           if (!currentImage) {
             ctx.fillStyle = '#f0f0f0';
-            ctx.fillRect(20, 120, rect.width - 40, 250);
+            ctx.beginPath();
+            ctx.roundRect(20, 120, rect.width - 40, 250, 12);
+            ctx.fill();
             ctx.fillStyle = '#666666';
             ctx.font = '18px Arial';
+            ctx.textAlign = 'center';
             ctx.fillText('ছবি', rect.width / 2, 250);
           }
           
@@ -833,7 +889,7 @@
           ctx.fillStyle = gradient;
           ctx.fillRect(0, 390, rect.width, 120);
           
-          // Draw headline
+          // Draw headline with word wrapping
           ctx.fillStyle = '#ffffff';
           ctx.font = `bold ${fontSizeSlider.value}px Arial`;
           ctx.textAlign = 'center';
@@ -843,6 +899,7 @@
           let line = '';
           let y = 430;
           const maxWidth = rect.width - 40;
+          const lineHeight = parseInt(fontSizeSlider.value) + 5;
           
           for (let n = 0; n < words.length; n++) {
             const testLine = line + words[n] + ' ';
@@ -852,7 +909,7 @@
             if (testWidth > maxWidth && n > 0) {
               ctx.fillText(line, rect.width / 2, y);
               line = words[n] + ' ';
-              y += parseInt(fontSizeSlider.value) + 5;
+              y += lineHeight;
             } else {
               line = testLine;
             }
@@ -864,7 +921,9 @@
           ctx.fillRect(0, 510, rect.width, 60);
           ctx.fillStyle = '#ffffff';
           ctx.font = '16px Arial';
-          ctx.fillText('🌐 বিস্তারিত পড়ুন: amadersomaj.com', rect.width / 2, 545);
+          ctx.textAlign = 'center';
+          const websiteText = websiteLink.textContent;
+          ctx.fillText(websiteText, rect.width / 2, 545);
           
           resolve(canvas);
         }).catch(reject);
@@ -873,15 +932,17 @@
 
     function resetCard() {
       headlineInput.value = 'এখানে আপনার খবরের শিরোনাম লিখুন';
+      websiteInput.value = 'amadersomaj.com';
       imageUrlInput.value = '';
-      logoUrlInput.value = '';
+      logoUrlInput.value = 'https://i.ibb.co/vxYQbwSV/file-4.png';
       imageUpload.value = '';
       logoUpload.value = '';
       currentImage = null;
-      currentLogo = null;
+      currentLogo = logoUrlInput.value;
       fontSizeSlider.value = 32;
       
       updateHeadline();
+      updateWebsite();
       updateFontSize();
       updateCardImage();
       updateCardLogo();
@@ -889,16 +950,8 @@
       applyTemplate('default');
       
       // Reset upload buttons
-      const imageBtn = document.querySelector('button[onclick*="imageUpload"]');
-      const logoBtn = document.querySelector('button[onclick*="logoUpload"]');
-      if (imageBtn) {
-        imageBtn.classList.remove('has-file');
-        imageBtn.innerHTML = '<i class="fas fa-upload"></i> ছবি আপলোড করুন';
-      }
-      if (logoBtn) {
-        logoBtn.classList.remove('has-file');
-        logoBtn.innerHTML = '<i class="fas fa-upload"></i> লোগো আপলোড করুন';
-      }
+      resetUploadButton('imageUpload');
+      resetUploadButton('logoUpload');
       
       showNotification('কার্ড রিসেট করা হয়েছে', 'success');
     }
@@ -943,6 +996,9 @@
     document.addEventListener('DOMContentLoaded', () => {
       setDate();
       updateFontSize();
+      // Set default logo
+      currentLogo = logoUrlInput.value;
+      updateCardLogo();
     });
   </script>
 </body>
