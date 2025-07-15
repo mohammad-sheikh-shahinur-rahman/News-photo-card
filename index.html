@@ -1,1211 +1,463 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>আমাদের সমাজ | প্রিমিয়াম নিউজ কার্ড জেনারেটর</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root {
-      /* Brand Colors */
-      --brand-primary: #ba000d;
-      --brand-secondary: #9a000a;
-      --brand-accent: #ff1744;
-      --brand-light: #ffebee;
-      
-      /* Neutral Colors */
-      --white: #ffffff;
-      --black: #000000;
-      --gray-50: #fafafa;
-      --gray-100: #f5f5f5;
-      --gray-200: #eeeeee;
-      --gray-300: #e0e0e0;
-      --gray-400: #bdbdbd;
-      --gray-500: #9e9e9e;
-      --gray-600: #757575;
-      --gray-700: #616161;
-      --gray-800: #424242;
-      --gray-900: #212121;
-      
-      /* Theme Variables */
-      --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --surface: rgba(255, 255, 255, 0.95);
-      --surface-glass: rgba(255, 255, 255, 0.1);
-      --text-primary: #1a1a1a;
-      --text-secondary: #666666;
-      --text-muted: #999999;
-      --border: rgba(255, 255, 255, 0.2);
-      --shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.15);
-      
-      /* Animation Variables */
-      --transition-fast: 0.2s ease;
-      --transition-normal: 0.3s ease;
-      --transition-slow: 0.5s ease;
-      --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    }
-
-    [data-theme="dark"] {
-      --background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      --surface: rgba(30, 30, 30, 0.95);
-      --surface-glass: rgba(255, 255, 255, 0.05);
-      --text-primary: #ffffff;
-      --text-secondary: #cccccc;
-      --text-muted: #888888;
-      --border: rgba(255, 255, 255, 0.1);
-      --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.4);
-    }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    :root {
+      --brand-primary: #dc2626;
+      --brand-secondary: #991b1b;
+      --text-primary: #1f2937;
+      --text-secondary: #6b7280;
+      --bg-primary: #f8fafc;
+      --bg-secondary: #ffffff;
+      --border-color: #e5e7eb;
+      --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --gradient-primary: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+      --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
     body {
-      font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
-      background: var(--background);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--gradient-bg);
       min-height: 100vh;
+      padding: 20px;
       color: var(--text-primary);
-      overflow-x: hidden;
-      transition: all var(--transition-normal);
-    }
-
-    /* Animated Background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-      animation: backgroundShift 20s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    @keyframes backgroundShift {
-      0%, 100% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.1) rotate(180deg); }
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem;
-      position: relative;
-      z-index: 1;
     }
 
-    /* Header */
     .header {
       text-align: center;
-      margin-bottom: 3rem;
-      animation: fadeInUp 0.8s ease;
+      margin-bottom: 40px;
+      color: white;
     }
 
     .header h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
-    .header p {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
-      font-weight: 300;
+    .header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
     }
 
-    /* Theme Toggle */
-    .theme-toggle {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      z-index: 1000;
-      background: var(--surface-glass);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all var(--transition-normal);
-      box-shadow: var(--shadow);
-    }
-
-    .theme-toggle:hover {
-      transform: scale(1.1) rotate(180deg);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .theme-toggle i {
-      font-size: 1.5rem;
-      color: var(--text-primary);
-    }
-
-    /* Main Layout */
-    .main-layout {
+    .main-content {
       display: grid;
       grid-template-columns: 1fr 400px;
-      gap: 3rem;
+      gap: 40px;
       align-items: start;
     }
 
-    /* Card Preview */
-    .card-container {
-      position: sticky;
-      top: 2rem;
-    }
-
     .card-preview {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .news-card {
       width: 100%;
-      max-width: 600px;
-      aspect-ratio: 1;
+      max-width: 500px;
       margin: 0 auto;
-      border-radius: 24px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 20px;
       overflow: hidden;
-      background: var(--white);
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--shadow-heavy);
       position: relative;
-      display: flex;
-      flex-direction: column;
-      transition: all var(--transition-normal);
-      animation: fadeInScale 0.8s var(--bounce);
     }
 
-    .card-preview:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Card Header */
     .card-header {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      right: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      z-index: 10;
+      align-items: center;
+      padding: 20px;
+      position: relative;
     }
 
     .channel-logo {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 8px;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       width: 80px;
       height: 80px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: all var(--transition-normal);
-    }
-
-    .channel-logo:hover {
-      transform: scale(1.05);
-    }
-
-    .channel-logo img {
-      max-height: 64px;
-      max-width: 64px;
+      background: white;
       border-radius: 12px;
-      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-medium);
+      font-weight: bold;
+      color: #666;
+      font-size: 12px;
     }
-
-
 
     .date-tag {
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-      color: var(--white);
-      padding: 10px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 4px 16px rgba(186, 0, 13, 0.3);
-      backdrop-filter: blur(20px);
-    }
-
-    /* Main Image */
-    .main-image {
-      width: 100%;
-      height: 60%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      border-bottom: 4px solid var(--brand-primary);
-      background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
-      transition: all var(--transition-normal);
-    }
-
-    .main-image:hover {
-      transform: scale(1.02);
-    }
-
-    /* Headline */
-    .headline {
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-      color: var(--white);
-      font-size: clamp(1.2rem, 3.5vw, 2rem);
-      font-weight: 700;
-      padding: 2rem;
-      line-height: 1.4;
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .headline::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      animation: shimmer 3s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { left: -100%; }
-      100% { left: 100%; }
-    }
-
-    /* Card Footer */
-    .card-footer {
-      background: linear-gradient(135deg, var(--brand-secondary), #7b0000);
-      padding: 1.5rem;
-      font-size: 1rem;
-      color: var(--white);
-      font-weight: 600;
-      text-align: center;
-      position: relative;
-    }
-
-    .card-footer::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--brand-accent), transparent);
-    }
-
-    /* Controls Panel */
-    .controls-panel {
-      background: var(--surface);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      animation: fadeInRight 0.8s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .controls-panel::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent), var(--brand-primary));
-      background-size: 200% 100%;
-      animation: gradientShift 3s ease-in-out infinite;
-    }
-
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .controls-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    /* Input Groups */
-    .input-group {
-      margin-bottom: 2rem;
-      animation: fadeInUp 0.6s ease;
-      animation-fill-mode: both;
-    }
-
-    .input-group:nth-child(2) { animation-delay: 0.1s; }
-    .input-group:nth-child(3) { animation-delay: 0.2s; }
-    .input-group:nth-child(4) { animation-delay: 0.3s; }
-    .input-group:nth-child(5) { animation-delay: 0.4s; }
-
-    .input-label {
-      display: block;
-      margin-bottom: 0.75rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      font-size: 0.95rem;
-    }
-
-    .input-label i {
-      margin-right: 0.5rem;
-      color: var(--brand-primary);
-    }
-
-    /* Input Styles */
-    .input-field {
-      width: 100%;
-      padding: 1rem 1.25rem;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      font-size: 1rem;
-      background: var(--surface);
-      color: var(--text-primary);
-      transition: all var(--transition-normal);
-      backdrop-filter: blur(20px);
-    }
-
-    .input-field:focus {
-      outline: none;
-      border-color: var(--brand-primary);
-      box-shadow: 0 0 0 4px rgba(186, 0, 13, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .input-field::placeholder {
-      color: var(--text-muted);
-    }
-
-    /* File Input */
-    .file-input-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .file-input {
-      position: absolute;
-      left: -9999px;
-    }
-
-    .file-input-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      background: var(--surface);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all var(--transition-normal);
-      min-height: 60px;
-    }
-
-    .file-input-label:hover {
-      border-color: var(--brand-primary);
-      background: var(--brand-light);
-      transform: translateY(-2px);
-    }
-
-    .file-input-label i {
-      margin-right: 0.5rem;
-      font-size: 1.2rem;
-    }
-
-    /* Range Slider */
-    .range-container {
-      position: relative;
-    }
-
-    .range-input {
-      width: 100%;
-      height: 8px;
-      border-radius: 4px;
-      background: var(--gray-200);
-      outline: none;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-
-    .range-input::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: all var(--transition-normal);
-    }
-
-    .range-input::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .range-value {
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--brand-primary);
-      color: var(--white);
-      padding: 0.25rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
-    /* Action Buttons */
-    .actions {
-      margin-top: 2rem;
-      display: flex;
-      gap: 1rem;
-    }
-
-    .btn {
-      flex: 1;
-      padding: 1rem 1.5rem;
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all var(--transition-normal);
-      position: relative;
-      overflow: hidden;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-      color: var(--white);
-      box-shadow: 0 4px 16px rgba(186, 0, 13, 0.3);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(186, 0, 13, 0.4);
-    }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text-primary);
-      border: 2px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      background: var(--brand-light);
-      border-color: var(--brand-primary);
-      transform: translateY(-2px);
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: all var(--transition-normal);
-    }
-
-    .btn:hover::before {
-      left: 100%;
-    }
-
-    .btn i {
-      margin-right: 0.5rem;
-    }
-
-    /* Footer */
-    .footer {
-      text-align: center;
-      margin-top: 4rem;
-      padding: 2rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeInRight {
-      from {
-        opacity: 0;
-        transform: translateX(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    @keyframes fadeInScale {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    /* Advanced Responsive Design */
-    @media (max-width: 1200px) {
-      .main-layout {
-        grid-template-columns: 1fr 350px;
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 1024px) {
-      .main-layout {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .card-container {
-        position: static;
-        order: 1;
-      }
-
-      .controls-panel {
-        order: 2;
-      }
-
-      .theme-toggle {
-        top: 1rem;
-        right: 1rem;
-        width: 50px;
-        height: 50px;
-      }
-
-      .header h1 {
-        font-size: clamp(1.8rem, 4vw, 2.5rem);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 1rem;
-      }
-
-      .header {
-        margin-bottom: 2rem;
-      }
-
-      .header h1 {
-        font-size: clamp(1.5rem, 6vw, 2rem);
-      }
-
-      .header p {
-        font-size: 1rem;
-      }
-
-      .controls-panel {
-        padding: 1.5rem;
-        border-radius: 20px;
-      }
-
-      .card-preview {
-        max-width: 100%;
-        border-radius: 20px;
-      }
-
-      .card-header {
-        top: 15px;
-        left: 15px;
-        right: 15px;
-      }
-
-      .channel-logo {
-        width: 60px;
-        height: 60px;
-      }
-
-      .channel-logo img {
-        max-width: 48px;
-        max-height: 48px;
-      }
-
-      .date-tag {
-        font-size: 11px;
-        padding: 6px 10px;
-        border-radius: 8px;
-      }
-
-      .headline {
-        padding: 1.5rem;
-        font-size: clamp(1rem, 4vw, 1.4rem);
-      }
-
-      .card-footer {
-        padding: 1.2rem;
-        font-size: 0.9rem;
-      }
-
-      .actions {
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-
-      .btn {
-        padding: 0.875rem 1.25rem;
-        font-size: 0.95rem;
-      }
-
-      .input-field {
-        padding: 0.875rem 1rem;
-        font-size: 0.95rem;
-      }
-
-      .file-input-label {
-        padding: 0.875rem;
-        font-size: 0.95rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0.75rem;
-      }
-
-      .header {
-        margin-bottom: 1.5rem;
-      }
-
-      .header h1 {
-        font-size: clamp(1.3rem, 7vw, 1.8rem);
-        margin-bottom: 0.25rem;
-      }
-
-      .header p {
-        font-size: 0.9rem;
-      }
-
-      .theme-toggle {
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 45px;
-        height: 45px;
-      }
-
-      .theme-toggle i {
-        font-size: 1.2rem;
-      }
-
-      .card-preview {
-        border-radius: 16px;
-      }
-
-      .card-header {
-        top: 12px;
-        left: 12px;
-        right: 12px;
-      }
-
-      .channel-logo {
-        width: 50px;
-        height: 50px;
-        padding: 4px;
-        border-radius: 12px;
-      }
-
-      .channel-logo img {
-        max-width: 40px;
-        max-height: 40px;
-        border-radius: 8px;
-      }
-
-      .date-tag {
-        font-size: 10px;
-        padding: 5px 8px;
-        border-radius: 6px;
-      }
-
-      .headline {
-        padding: 1.25rem;
-        font-size: clamp(0.9rem, 4.5vw, 1.2rem);
-        line-height: 1.3;
-      }
-
-      .card-footer {
-        padding: 1rem;
-        font-size: 0.8rem;
-      }
-
-      .controls-panel {
-        padding: 1.25rem;
-        border-radius: 16px;
-      }
-
-      .controls-title {
-        font-size: 1.25rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .input-group {
-        margin-bottom: 1.5rem;
-      }
-
-      .input-label {
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .input-field {
-        padding: 0.75rem;
-        font-size: 0.9rem;
-        border-radius: 10px;
-      }
-
-      .file-input-label {
-        padding: 0.75rem;
-        font-size: 0.9rem;
-        border-radius: 10px;
-        min-height: 50px;
-      }
-
-      .btn {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-        border-radius: 10px;
-      }
-
-      .range-input {
-        height: 6px;
-      }
-
-      .range-input::-webkit-slider-thumb {
-        width: 20px;
-        height: 20px;
-      }
-
-      .range-value {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.6rem;
-        top: -35px;
-      }
-
-      .footer {
-        margin-top: 2rem;
-        padding: 1rem;
-        font-size: 0.8rem;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .header h1 {
-        font-size: 1.2rem;
-      }
-
-      .date-tag {
-        font-size: 9px;
-        padding: 4px 6px;
-      }
-
-      .headline {
-        padding: 1rem;
-        font-size: 1rem;
-      }
-
-      .card-footer {
-        padding: 0.875rem;
-        font-size: 0.75rem;
-      }
-    }
-
-    /* Touch-friendly interactions */
-    @media (hover: none) and (pointer: coarse) {
-      .btn:hover {
-        transform: none;
-      }
-
-      .btn:active {
-        transform: scale(0.98);
-      }
-
-      .input-field:focus {
-        transform: none;
-      }
-
-      .file-input-label:hover {
-        transform: none;
-      }
-
-      .file-input-label:active {
-        transform: scale(0.98);
-      }
-
-      .theme-toggle:hover {
-        transform: none;
-      }
-
-      .theme-toggle:active {
-        transform: scale(0.95);
-      }
-
-      .card-preview:hover {
-        transform: none;
-      }
-
-      .channel-logo:hover {
-        transform: none;
-      }
-
-      .main-image:hover {
-        transform: none;
-      }
-    }
-
-    /* High DPI displays */
-    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      .card-preview {
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-      }
-
-      .controls-panel {
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      }
-    }
-
-    /* Landscape orientation on mobile */
-    @media (max-width: 768px) and (orientation: landscape) {
-      .main-layout {
-        grid-template-columns: 1fr 300px;
-        gap: 1.5rem;
-      }
-
-      .card-container {
-        order: 1;
-      }
-
-      .controls-panel {
-        order: 2;
-        padding: 1rem;
-      }
-
-      .header {
-        margin-bottom: 1.5rem;
-      }
-
-      .input-group {
-        margin-bottom: 1.25rem;
-      }
-    }
-
-    /* Color Picker */
-    .color-picker-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .color-input {
-      width: 60px;
-      height: 40px;
-      border: 2px solid var(--border);
-      border-radius: 8px;
-      cursor: pointer;
-      background: none;
-      padding: 0;
-    }
-
-    .color-input::-webkit-color-swatch-wrapper {
-      padding: 0;
-    }
-
-    .color-input::-webkit-color-swatch {
-      border: none;
-      border-radius: 6px;
-    }
-
-    .color-presets {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .color-preset {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid var(--border);
-      transition: all var(--transition-fast);
-      position: relative;
-    }
-
-    .color-preset:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .color-preset.active::after {
-      content: '✓';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      background: var(--gradient-primary);
       color: white;
-      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 8px;
       font-size: 14px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      font-weight: 600;
+      box-shadow: var(--shadow-medium);
     }
 
-    /* Template Presets */
-    .template-presets {
+    .card-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card-content {
+      background: var(--gradient-primary);
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .news-title {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-footer {
+      background: var(--brand-secondary);
+      padding: 15px 20px;
+      text-align: center;
+    }
+
+    .website-link {
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .controls-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: var(--shadow-heavy);
+      height: fit-content;
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .input-group input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input[type="text"]:focus {
+      outline: none;
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .color-picker-group {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .color-option {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .color-option:hover {
+      transform: scale(1.1);
+    }
+
+    .color-option.active {
+      border-color: #333;
+      transform: scale(1.1);
+    }
+
+    .color-option[data-color="#dc2626"] { background: #dc2626; }
+    .color-option[data-color="#2563eb"] { background: #2563eb; }
+    .color-option[data-color="#16a34a"] { background: #16a34a; }
+    .color-option[data-color="#ea580c"] { background: #ea580c; }
+    .color-option[data-color="#9333ea"] { background: #9333ea; }
+    .color-option[data-color="#0891b2"] { background: #0891b2; }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .template-btn {
-      padding: 0.75rem;
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      background: var(--surface);
-      color: var(--text-secondary);
+      padding: 15px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: white;
       cursor: pointer;
-      transition: all var(--transition-normal);
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-weight: 600;
     }
 
     .template-btn:hover {
       border-color: var(--brand-primary);
-      background: var(--brand-light);
-      transform: translateY(-2px);
+      background: #fef2f2;
     }
 
     .template-btn.active {
       border-color: var(--brand-primary);
       background: var(--brand-primary);
-      color: var(--white);
+      color: white;
     }
 
-    .template-btn i {
-      font-size: 1.2rem;
+    .font-size-control {
+      margin-top: 10px;
     }
 
-    /* Loading Animation */
+    .font-size-slider {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 15px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: var(--text-primary);
+      border: 2px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: #16a34a;
+    }
+
+    .notification.error {
+      background: #dc2626;
+    }
+
     .loading {
-      display: inline-block;
       width: 20px;
       height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
       border-radius: 50%;
-      border-top-color: var(--white);
-      animation: spin 1s ease-in-out infinite;
+      animation: spin 1s linear infinite;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    /* Success Animation */
-    .success-checkmark {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #4caf50;
-      position: relative;
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .main-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .news-title {
+        font-size: 24px;
+      }
+      
+      .controls-panel {
+        padding: 20px;
+      }
     }
 
-    .success-checkmark::after {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 3px;
-      width: 6px;
-      height: 10px;
-      border: solid white;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .news-title {
+        font-size: 20px;
+      }
+      
+      .template-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .actions {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
-    <header class="header">
+    <div class="header">
       <h1><i class="fas fa-newspaper"></i> আমাদের সমাজ</h1>
-      <p>প্রিমিয়াম নিউজ কার্ড জেনারেটর</p>
-    </header>
-
-    <!-- Theme Toggle -->
-    <div class="theme-toggle" onclick="toggleTheme()">
-      <i class="fas fa-moon" id="themeIcon"></i>
+      <p class="subtitle">প্রিমিয়াম নিউজ কার্ড জেনারেটর</p>
     </div>
 
-    <!-- Main Layout -->
-    <div class="main-layout">
-      <!-- Card Preview -->
-      <div class="card-container">
-        <div class="card-preview" id="newsCard">
+    <div class="main-content">
+      <div class="card-preview">
+        <div class="news-card" id="newsCard">
           <div class="card-header">
             <div class="channel-logo">
-              <img id="logoImage" src="https://i.ibb.co/vxYQbwSV/file-4.png" alt="আমাদের সমাজ">
+              আমাদের সমাজ
             </div>
-            <div class="date-tag" id="dateTag"></div>
+            <div class="date-tag" id="dateTag">
+              ১৫ জুলাই, ২০২৫
+            </div>
           </div>
-
-          <img id="newsImage" class="main-image" src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=600&fit=crop" alt="নিউজ ছবি">
-          <div class="headline" id="newsTitle">এখানে আপনার খবরের শিরোনাম লিখুন</div>
+          
+          <div class="card-image" id="cardImage">
+            ছবি
+          </div>
+          
+          <div class="card-content">
+            <h2 class="news-title" id="newsTitle">এখানে আপনার খবরের শিরোনাম লিখুন</h2>
+          </div>
+          
           <div class="card-footer">
-            <i class="fas fa-globe"></i> বিস্তারিত পড়ুন: <strong>amadersomaj.com</strong>
+            <div class="website-link">
+              🌐 বিস্তারিত পড়ুন: amadersomaj.com
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Controls Panel -->
       <div class="controls-panel">
-        <h2 class="controls-title">
-          <i class="fas fa-cog"></i> কাস্টমাইজেশন
-        </h2>
-
         <div class="input-group">
-          <label class="input-label" for="headlineInput">
-            <i class="fas fa-edit"></i> শিরোনাম
-          </label>
-          <input 
-            type="text" 
-            id="headlineInput" 
-            class="input-field"
-            placeholder="আপনার খবরের শিরোনাম লিখুন..." 
-            oninput="updateTitle(this.value)"
-          >
+          <label for="headlineInput">📰 খবরের শিরোনাম</label>
+          <input type="text" id="headlineInput" placeholder="আপনার খবরের শিরোনাম লিখুন..." value="এখানে আপনার খবরের শিরোনাম লিখুন">
         </div>
 
         <div class="input-group">
-          <label class="input-label">
-            <i class="fas fa-image"></i> ছবি আপলোড
-          </label>
-          <div class="file-input-wrapper">
-            <input type="file" id="imageUpload" class="file-input" accept="image/*" onchange="loadImage(event)">
-            <label for="imageUpload" class="file-input-label">
-              <i class="fas fa-cloud-upload-alt"></i>
-              ছবি নির্বাচন করুন
-            </label>
+          <label>🎨 ব্র্যান্ড কালার</label>
+          <div class="color-picker-group">
+            <div class="color-option active" data-color="#dc2626" title="ডিফল্ট লাল"></div>
+            <div class="color-option" data-color="#2563eb" title="নীল"></div>
+            <div class="color-option" data-color="#16a34a" title="সবুজ"></div>
+            <div class="color-option" data-color="#ea580c" title="কমলা"></div>
+            <div class="color-option" data-color="#9333ea" title="বেগুনি"></div>
+            <div class="color-option" data-color="#0891b2" title="আকাশী"></div>
           </div>
         </div>
 
         <div class="input-group">
-          <label class="input-label" for="imageUrlInput">
-            <i class="fas fa-link"></i> অথবা ছবির লিংক
-          </label>
-          <input 
-            type="text" 
-            id="imageUrlInput" 
-            class="input-field"
-            placeholder="ছবির URL পেস্ট করুন..." 
-            oninput="updateImageFromURL(this.value)"
-          >
-        </div>
-
-        <div class="input-group">
-          <label class="input-label" for="colorPicker">
-            <i class="fas fa-palette"></i> ব্র্যান্ড কালার
-          </label>
-          <div class="color-picker-container">
-            <input 
-              type="color" 
-              id="colorPicker" 
-              class="color-input"
-              value="#ba000d" 
-              onchange="updateBrandColor(this.value)"
-            >
-            <div class="color-presets">
-              <div class="color-preset" style="background: #ba000d;" onclick="updateBrandColor('#ba000d')" title="ডিফল্ট লাল"></div>
-              <div class="color-preset" style="background: #1976d2;" onclick="updateBrandColor('#1976d2')" title="নীল"></div>
-              <div class="color-preset" style="background: #388e3c;" onclick="updateBrandColor('#388e3c')" title="সবুজ"></div>
-              <div class="color-preset" style="background: #f57c00;" onclick="updateBrandColor('#f57c00')" title="কমলা"></div>
-              <div class="color-preset" style="background: #7b1fa2;" onclick="updateBrandColor('#7b1fa2')" title="বেগুনি"></div>
-              <div class="color-preset" style="background: #5d4037;" onclick="updateBrandColor('#5d4037')" title="বাদামি"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label class="input-label">
-            <i class="fas fa-layer-group"></i> টেমপ্লেট প্রিসেট
-          </label>
-          <div class="template-presets">
-            <button class="template-btn active" onclick="applyTemplate('default')">
+          <label>📋 টেমপ্লেট প্রিসেট</label>
+          <div class="template-grid">
+            <button class="template-btn active" data-template="default">
               <i class="fas fa-newspaper"></i> ডিফল্ট
             </button>
-            <button class="template-btn" onclick="applyTemplate('breaking')">
+            <button class="template-btn" data-template="breaking">
               <i class="fas fa-bolt"></i> ব্রেকিং
             </button>
-            <button class="template-btn" onclick="applyTemplate('sports')">
+            <button class="template-btn" data-template="sports">
               <i class="fas fa-futbol"></i> খেলা
             </button>
-            <button class="template-btn" onclick="applyTemplate('tech')">
+            <button class="template-btn" data-template="tech">
               <i class="fas fa-microchip"></i> প্রযুক্তি
             </button>
           </div>
         </div>
 
         <div class="input-group">
-          <label class="input-label" for="fontSizeSlider">
-            <i class="fas fa-text-height"></i> ফন্ট সাইজ: <span id="fontSizeValue">32</span>px
-          </label>
-          <div class="range-container">
-            <input 
-              type="range" 
-              id="fontSizeSlider" 
-              class="range-input"
-              min="18" 
-              max="48" 
-              value="32" 
-              oninput="updateFontSize(this.value)"
-            >
-            <div class="range-value" id="rangeValue">32px</div>
-          </div>
+          <label for="fontSizeSlider">🔤 ফন্ট সাইজ: <span id="fontSizeValue">32px</span></label>
+          <input type="range" id="fontSizeSlider" class="font-size-slider" min="20" max="48" value="32">
         </div>
 
         <div class="actions">
@@ -1213,495 +465,264 @@
             <i class="fas fa-download"></i> ডাউনলোড
           </button>
           <button class="btn btn-secondary" onclick="resetCard()">
-            <i class="fas fa-undo"></i> রিসেট
+            <i class="fas fa-redo"></i> রিসেট
           </button>
         </div>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <p>&copy; 2025 amadersomaj.com | Crafted with <i class="fas fa-heart" style="color: #ff1744;"></i> by Mohammad Sheikh Shahinur Rahman</p>
-    </footer>
   </div>
 
   <script>
     // DOM Elements
-    const newsImage = document.getElementById('newsImage');
+    const headlineInput = document.getElementById('headlineInput');
     const newsTitle = document.getElementById('newsTitle');
-    const dateTag = document.getElementById('dateTag');
     const fontSizeSlider = document.getElementById('fontSizeSlider');
     const fontSizeValue = document.getElementById('fontSizeValue');
-    const rangeValue = document.getElementById('rangeValue');
-    const headlineInput = document.getElementById('headlineInput');
-    const imageUrlInput = document.getElementById('imageUrlInput');
-    const imageUpload = document.getElementById('imageUpload');
-    const themeIcon = document.getElementById('themeIcon');
+    const colorOptions = document.querySelectorAll('.color-option');
+    const templateBtns = document.querySelectorAll('.template-btn');
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function() {
-      setDate();
-      updateRangeValue();
-      
-      // Add smooth scroll behavior
-      document.documentElement.style.scrollBehavior = 'smooth';
-      
-      // Add loading states
-      addLoadingStates();
+    // Event Listeners
+    headlineInput.addEventListener('input', updateHeadline);
+    fontSizeSlider.addEventListener('input', updateFontSize);
+
+    colorOptions.forEach(option => {
+      option.addEventListener('click', () => updateBrandColor(option.dataset.color));
+    });
+
+    templateBtns.forEach(btn => {
+      btn.addEventListener('click', () => applyTemplate(btn.dataset.template));
     });
 
     // Functions
-    const loadImage = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        // Show loading state
-        showImageLoading();
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          newsImage.src = e.target.result;
-          imageUrlInput.value = '';
-          hideImageLoading();
-          
-          // Add success animation
-          newsImage.style.animation = 'fadeInScale 0.5s ease';
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+    function updateHeadline() {
+      const headline = headlineInput.value || 'এখানে আপনার খবরের শিরোনাম লিখুন';
+      newsTitle.textContent = headline;
+    }
 
-    const updateImageFromURL = (url) => {
-      if (url.trim()) {
-        showImageLoading();
-        
-        // Create a new image to test if URL is valid
-        const testImg = new Image();
-        testImg.crossOrigin = 'anonymous';
-        testImg.onload = () => {
-          newsImage.src = url;
-          imageUpload.value = '';
-          hideImageLoading();
-          newsImage.style.animation = 'fadeInScale 0.5s ease';
-        };
-        testImg.onerror = () => {
-          hideImageLoading();
-          showNotification('ছবি লোড করতে সমস্যা হয়েছে', 'error');
-        };
-        testImg.src = url;
-      } else {
-        newsImage.src = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=600&fit=crop";
-      }
-    };
+    function updateFontSize() {
+      const size = fontSizeSlider.value;
+      fontSizeValue.textContent = size + 'px';
+      newsTitle.style.fontSize = size + 'px';
+    }
 
-    const updateTitle = (text) => {
-      const title = text.trim() || 'এখানে আপনার খবরের শিরোনাম লিখুন';
-      newsTitle.textContent = title;
+    function updateBrandColor(color) {
+      document.documentElement.style.setProperty('--brand-primary', color);
+      document.documentElement.style.setProperty('--brand-secondary', adjustBrightness(color, -20));
       
-      // Add typing animation
-      newsTitle.style.animation = 'fadeInUp 0.3s ease';
-    };
+      // Update active state
+      colorOptions.forEach(opt => opt.classList.remove('active'));
+      document.querySelector(`[data-color="${color}"]`).classList.add('active');
+    }
 
-    const updateFontSize = (size) => {
-      newsTitle.style.fontSize = `${size}px`;
-      fontSizeValue.textContent = size;
-      rangeValue.textContent = `${size}px`;
-      updateRangeValue();
-    };
+    function applyTemplate(template) {
+      const templates = {
+        default: {
+          headline: 'এখানে আপনার খবরের শিরোনাম লিখুন',
+          color: '#dc2626'
+        },
+        breaking: {
+          headline: 'জরুরি: গুরুত্বপূর্ণ সংবাদ',
+          color: '#dc2626'
+        },
+        sports: {
+          headline: 'খেলার জগতে নতুন রেকর্ড',
+          color: '#16a34a'
+        },
+        tech: {
+          headline: 'প্রযুক্তির নতুন উদ্ভাবন',
+          color: '#2563eb'
+        }
+      };
 
-    const updateRangeValue = () => {
-      const slider = fontSizeSlider;
-      const value = slider.value;
-      const min = slider.min;
-      const max = slider.max;
-      const percentage = ((value - min) / (max - min)) * 100;
-      
-      rangeValue.style.left = `${percentage}%`;
-    };
+      const selectedTemplate = templates[template];
+      headlineInput.value = selectedTemplate.headline;
+      updateHeadline();
+      updateBrandColor(selectedTemplate.color);
 
-    const downloadCard = () => {
-      const card = document.getElementById("newsCard");
+      // Update active state
+      templateBtns.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-template="${template}"]`).classList.add('active');
+    }
+
+    function downloadCard() {
       const button = event.target;
+      const originalContent = button.innerHTML;
       
       // Show loading state
-      const originalContent = button.innerHTML;
       button.innerHTML = '<div class="loading"></div> প্রসেসিং...';
       button.disabled = true;
-      
-      // Create a clone of the card to avoid CORS issues
-      const cardClone = card.cloneNode(true);
-      const cloneImage = cardClone.querySelector('#newsImage');
-      
-      // Convert external images to base64 to avoid CORS issues
-      if (cloneImage && cloneImage.src && !cloneImage.src.startsWith('data:')) {
-        convertImageToBase64(cloneImage.src)
-          .then(base64 => {
-            cloneImage.src = base64;
-            cloneImage.crossOrigin = null;
-            cloneImage.removeAttribute('crossorigin');
-            
-            // Temporarily replace the original card
-            card.style.display = 'none';
-            card.parentNode.insertBefore(cardClone, card);
-            
-            // Capture the clone
-            html2canvas(cardClone, {
-              useCORS: false,
-              allowTaint: true,
-              backgroundColor: '#ffffff',
-              scale: 2,
-              logging: false,
-              width: cardClone.offsetWidth,
-              height: cardClone.offsetHeight,
-              foreignObjectRendering: false,
-              imageTimeout: 0,
-              removeContainer: true
-            }).then(canvas => {
-              // Restore original card
-              card.style.display = 'flex';
-              cardClone.remove();
-              
-              const link = document.createElement("a");
-              const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-              link.download = `amadersomaj-news-card-${timestamp}.png`;
-              link.href = canvas.toDataURL("image/png", 1.0);
-              link.click();
-              
-              // Show success state
-              button.innerHTML = '<div class="success-checkmark"></div> সফল!';
-              setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.disabled = false;
-              }, 2000);
-              
-              showNotification('কার্ড সফলভাবে ডাউনলোড হয়েছে!', 'success');
-            }).catch(err => {
-              console.error("Download failed:", err);
-              // Restore original card on error
-              card.style.display = 'flex';
-              if (cardClone.parentNode) {
-                cardClone.remove();
-              }
-              
-              button.innerHTML = originalContent;
-              button.disabled = false;
-              showNotification('ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
-            });
-          })
-          .catch(err => {
-            console.error("Image conversion failed:", err);
-            // Fallback to original method
-            fallbackDownload(card, button, originalContent);
-          });
-      } else {
-        // If no external image or already base64, use original method
-        fallbackDownload(card, button, originalContent);
-      }
-    };
 
-    const convertImageToBase64 = (url) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
+      try {
+        // Create canvas-based download
+        createCanvasFromCard().then(canvas => {
+          const link = document.createElement('a');
+          const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+          link.download = `amadersomaj-news-card-${timestamp}.png`;
+          link.href = canvas.toDataURL('image/png', 1.0);
+          link.click();
+
+          // Show success state
+          button.innerHTML = '<i class="fas fa-check"></i> সফল!';
+          showNotification('কার্ড সফলভাবে ডাউনলোড হয়েছে!', 'success');
           
-          try {
-            const base64 = canvas.toDataURL('image/png');
-            resolve(base64);
-          } catch (e) {
-            reject(e);
-          }
-        };
-        
-        img.onerror = () => reject(new Error('Failed to load image'));
-        img.src = url;
-      });
-    };
-
-    const fallbackDownload = (card, button, originalContent) => {
-      html2canvas(card, {
-        useCORS: false,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        scale: 2,
-        logging: false,
-        foreignObjectRendering: false,
-        imageTimeout: 0
-      }).then(canvas => {
-        const link = document.createElement("a");
-        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-        link.download = `amadersomaj-news-card-${timestamp}.png`;
-        link.href = canvas.toDataURL("image/png", 1.0);
-        link.click();
-        
-        // Show success state
-        button.innerHTML = '<div class="success-checkmark"></div> সফল!';
-        setTimeout(() => {
+          setTimeout(() => {
+            button.innerHTML = originalContent;
+            button.disabled = false;
+          }, 2000);
+        }).catch(err => {
+          console.error('Download failed:', err);
           button.innerHTML = originalContent;
           button.disabled = false;
-        }, 2000);
-        
-        showNotification('কার্ড সফলভাবে ডাউনলোড হয়েছে!', 'success');
-      }).catch(err => {
-        console.error("Fallback download failed:", err);
+          showNotification('ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        });
+      } catch (err) {
+        console.error('Download failed:', err);
         button.innerHTML = originalContent;
         button.disabled = false;
-        showNotification('ডাউনলোড করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।', 'error');
-      });
-    };
-
-    const resetCard = () => {
-      headlineInput.value = '';
-      imageUrlInput.value = '';
-      imageUpload.value = '';
-      fontSizeSlider.value = 32;
-      
-      updateTitle('');
-      updateFontSize(32);
-      newsImage.src = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=600&fit=crop";
-      
-      showNotification('কার্ড রিসেট করা হয়েছে', 'info');
-    };
-
-    const toggleTheme = () => {
-      const body = document.body;
-      const isDark = body.hasAttribute('data-theme');
-      
-      if (isDark) {
-        body.removeAttribute('data-theme');
-        themeIcon.className = 'fas fa-moon';
-      } else {
-        body.setAttribute('data-theme', 'dark');
-        themeIcon.className = 'fas fa-sun';
+        showNotification('ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
       }
-      
-      // Add transition effect
-      body.style.transition = 'all 0.3s ease';
-    };
+    }
 
-    const setDate = () => {
-      const today = new Date();
-      const options = { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric',
-        timeZone: 'Asia/Dhaka'
-      };
-      
-      try {
-        const banglaDate = today.toLocaleDateString('bn-BD', options);
-        dateTag.innerHTML = `<i class="fas fa-calendar-alt"></i> ${banglaDate}`;
-      } catch (e) {
-        // Fallback for browsers that don't support bn-BD locale
-        const banglaMonths = [
-          "জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন",
-          "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"
-        ];
-        const formattedDate = `${today.getDate()} ${banglaMonths[today.getMonth()]} ${today.getFullYear()}`;
-        dateTag.innerHTML = `<i class="fas fa-calendar-alt"></i> ${formattedDate}`;
-      }
-    };
-
-    const updateBrandColor = (color) => {
-      // Update CSS custom properties
-      document.documentElement.style.setProperty('--brand-primary', color);
-      
-      // Calculate darker shade for secondary color
-      const darkerColor = adjustBrightness(color, -20);
-      document.documentElement.style.setProperty('--brand-secondary', darkerColor);
-      
-      // Update color picker value
-      document.getElementById('colorPicker').value = color;
-      
-      // Update active color preset
-      document.querySelectorAll('.color-preset').forEach(preset => {
-        preset.classList.remove('active');
-        if (preset.style.background === color) {
-          preset.classList.add('active');
+    function createCanvasFromCard() {
+      return new Promise((resolve, reject) => {
+        const card = document.getElementById('newsCard');
+        const rect = card.getBoundingClientRect();
+        
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set high resolution
+        const scale = 2;
+        canvas.width = rect.width * scale;
+        canvas.height = rect.height * scale;
+        ctx.scale(scale, scale);
+        
+        // Get computed styles
+        const cardStyle = getComputedStyle(card);
+        const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim();
+        const brandSecondary = getComputedStyle(document.documentElement).getPropertyValue('--brand-secondary').trim();
+        
+        // Draw card background
+        ctx.fillStyle = '#f8f9fa';
+        ctx.fillRect(0, 0, rect.width, rect.height);
+        
+        // Draw header section
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(20, 20, 80, 80);
+        ctx.fillStyle = '#666666';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('আমাদের সমাজ', 60, 65);
+        
+        // Draw date tag
+        ctx.fillStyle = brandColor;
+        ctx.fillRect(rect.width - 150, 20, 120, 35);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '14px Arial';
+        ctx.fillText('১৫ জুলাই, ২০২৫', rect.width - 90, 42);
+        
+        // Draw image placeholder
+        ctx.fillStyle = '#f0f0f0';
+        ctx.fillRect(20, 120, rect.width - 40, 250);
+        ctx.fillStyle = '#666666';
+        ctx.font = '18px Arial';
+        ctx.fillText('ছবি', rect.width / 2, 250);
+        
+        // Draw content background
+        const gradient = ctx.createLinearGradient(0, 390, rect.width, 390);
+        gradient.addColorStop(0, brandColor);
+        gradient.addColorStop(1, brandSecondary);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 390, rect.width, 120);
+        
+        // Draw headline
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${fontSizeSlider.value}px Arial`;
+        ctx.textAlign = 'center';
+        
+        const headline = newsTitle.textContent;
+        const words = headline.split(' ');
+        let line = '';
+        let y = 430;
+        const maxWidth = rect.width - 40;
+        
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + words[n] + ' ';
+          const metrics = ctx.measureText(testLine);
+          const testWidth = metrics.width;
+          
+          if (testWidth > maxWidth && n > 0) {
+            ctx.fillText(line, rect.width / 2, y);
+            line = words[n] + ' ';
+            y += parseInt(fontSizeSlider.value) + 5;
+          } else {
+            line = testLine;
+          }
         }
+        ctx.fillText(line, rect.width / 2, y);
+        
+        // Draw footer
+        ctx.fillStyle = brandSecondary;
+        ctx.fillRect(0, 510, rect.width, 60);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '16px Arial';
+        ctx.fillText('🌐 বিস্তারিত পড়ুন: amadersomaj.com', rect.width / 2, 545);
+        
+        resolve(canvas);
       });
-      
-      showNotification('ব্র্যান্ড কালার পরিবর্তন করা হয়েছে', 'success');
-    };
+    }
 
-    const adjustBrightness = (hex, percent) => {
-      // Remove # if present
+    function resetCard() {
+      headlineInput.value = 'এখানে আপনার খবরের শিরোনাম লিখুন';
+      fontSizeSlider.value = 32;
+      updateHeadline();
+      updateFontSize();
+      updateBrandColor('#dc2626');
+      applyTemplate('default');
+      showNotification('কার্ড রিসেট করা হয়েছে', 'success');
+    }
+
+    function adjustBrightness(hex, percent) {
       hex = hex.replace('#', '');
-      
-      // Parse RGB values
       const r = parseInt(hex.substr(0, 2), 16);
       const g = parseInt(hex.substr(2, 2), 16);
       const b = parseInt(hex.substr(4, 2), 16);
       
-      // Adjust brightness
       const newR = Math.max(0, Math.min(255, r + (r * percent / 100)));
       const newG = Math.max(0, Math.min(255, g + (g * percent / 100)));
       const newB = Math.max(0, Math.min(255, b + (b * percent / 100)));
       
-      // Convert back to hex
       return `#${Math.round(newR).toString(16).padStart(2, '0')}${Math.round(newG).toString(16).padStart(2, '0')}${Math.round(newB).toString(16).padStart(2, '0')}`;
-    };
-
-    const applyTemplate = (templateType) => {
-      // Remove active class from all template buttons
-      document.querySelectorAll('.template-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      
-      // Add active class to clicked button
-      event.target.closest('.template-btn').classList.add('active');
-      
-      const templates = {
-        default: {
-          color: '#ba000d',
-          headline: 'এখানে আপনার খবরের শিরোনাম লিখুন',
-          image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=600&fit=crop'
-        },
-        breaking: {
-          color: '#d32f2f',
-          headline: '🚨 জরুরি খবর: গুরুত্বপূর্ণ ঘটনা ঘটেছে',
-          image: 'https://images.unsplash.com/photo-1495020689067-958852a7765e?w=800&h=600&fit=crop'
-        },
-        sports: {
-          color: '#388e3c',
-          headline: '⚽ খেলার জগতে নতুন রেকর্ড সৃষ্টি',
-          image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=600&fit=crop'
-        },
-        tech: {
-          color: '#1976d2',
-          headline: '💻 প্রযুক্তির জগতে বিপ্লবী আবিষ্কার',
-          image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop'
-        }
-      };
-      
-      const template = templates[templateType];
-      if (template) {
-        updateBrandColor(template.color);
-        updateTitle(template.headline);
-        updateImageFromURL(template.image);
-        
-        // Update input fields
-        headlineInput.value = template.headline;
-        imageUrlInput.value = template.image;
-        
-        showNotification(`${templateType} টেমপ্লেট প্রয়োগ করা হয়েছে`, 'success');
-      }
-    };
-
-    // Utility Functions
-    const showImageLoading = () => {
-      newsImage.style.opacity = '0.5';
-      newsImage.style.filter = 'blur(2px)';
-    };
-
-    const hideImageLoading = () => {
-      newsImage.style.opacity = '1';
-      newsImage.style.filter = 'none';
-    };
-
-    const showNotification = (message, type = 'info') => {
-      // Create notification element
-      const notification = document.createElement('div');
-      notification.className = `notification notification-${type}`;
-      notification.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-        ${message}
-      `;
-      
-      // Add styles
-      Object.assign(notification.style, {
-        position: 'fixed',
-        top: '20px',
-        right: '20px',
-        background: type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3',
-        color: 'white',
-        padding: '1rem 1.5rem',
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-        zIndex: '10000',
-        animation: 'slideInRight 0.3s ease',
-        fontSize: '0.9rem',
-        fontWeight: '500'
-      });
-      
-      document.body.appendChild(notification);
-      
-      // Remove after 3 seconds
-      setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
-      }, 3000);
-    };
-
-    const addLoadingStates = () => {
-      // Add CSS for notifications
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes slideInRight {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOutRight {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
-        }
-      `;
-      document.head.appendChild(style);
-    };
-
-    // Add smooth scrolling and intersection observer for animations
-    const observeElements = () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 0.6s ease';
-          }
-        });
-      });
-
-      document.querySelectorAll('.input-group').forEach(el => {
-        observer.observe(el);
-      });
-    };
-
-    // Initialize observers when DOM is loaded
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', observeElements);
-    } else {
-      observeElements();
     }
 
-    // Add keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch(e.key) {
-          case 's':
-            e.preventDefault();
-            downloadCard();
-            break;
-          case 'r':
-            e.preventDefault();
-            resetCard();
-            break;
-          case 'd':
-            e.preventDefault();
-            toggleTheme();
-            break;
-        }
-      }
-    });
+    function showNotification(message, type) {
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => notification.classList.add('show'), 100);
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => document.body.removeChild(notification), 300);
+      }, 3000);
+    }
 
-    // Add range slider event listener
-    fontSizeSlider.addEventListener('input', updateRangeValue);
+    function setDate() {
+      const today = new Date();
+      const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      };
+      document.getElementById('dateTag').textContent = today.toLocaleDateString('bn-BD', options);
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      setDate();
+      updateFontSize();
+    });
   </script>
 </body>
 </html>
