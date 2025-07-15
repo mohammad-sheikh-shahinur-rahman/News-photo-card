@@ -341,6 +341,40 @@
       to { transform: rotate(360deg); }
     }
 
+    .file-upload-wrapper {
+      margin-top: 10px;
+    }
+
+    .file-upload-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      background: #f8f9fa;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .file-upload-btn:hover {
+      border-color: var(--brand-primary);
+      background: #fef2f2;
+      color: var(--brand-primary);
+    }
+
+    .file-upload-btn.has-file {
+      border-color: var(--brand-primary);
+      background: var(--brand-primary);
+      color: white;
+      border-style: solid;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .main-content {
@@ -426,6 +460,36 @@
         </div>
 
         <div class="input-group">
+          <label>🖼️ ছবি নির্বাচন করুন</label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+            <button class="file-upload-btn" onclick="document.getElementById('imageUpload').click()">
+              <i class="fas fa-upload"></i> ছবি আপলোড করুন
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="imageUrlInput">🔗 অথবা ছবির লিংক</label>
+          <input type="text" id="imageUrlInput" placeholder="ছবির URL পেস্ট করুন...">
+        </div>
+
+        <div class="input-group">
+          <label>🏢 লোগো নির্বাচন করুন</label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+            <button class="file-upload-btn" onclick="document.getElementById('logoUpload').click()">
+              <i class="fas fa-upload"></i> লোগো আপলোড করুন
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="logoUrlInput">🔗 অথবা লোগোর লিংক</label>
+          <input type="text" id="logoUrlInput" placeholder="লোগোর URL পেস্ট করুন...">
+        </div>
+
+        <div class="input-group">
           <label>🎨 ব্র্যান্ড কালার</label>
           <div class="color-picker-group">
             <div class="color-option active" data-color="#dc2626" title="ডিফল্ট লাল"></div>
@@ -480,10 +544,23 @@
     const fontSizeValue = document.getElementById('fontSizeValue');
     const colorOptions = document.querySelectorAll('.color-option');
     const templateBtns = document.querySelectorAll('.template-btn');
+    const imageUpload = document.getElementById('imageUpload');
+    const imageUrlInput = document.getElementById('imageUrlInput');
+    const logoUpload = document.getElementById('logoUpload');
+    const logoUrlInput = document.getElementById('logoUrlInput');
+    const cardImage = document.getElementById('cardImage');
+
+    // Image storage
+    let currentImage = null;
+    let currentLogo = null;
 
     // Event Listeners
     headlineInput.addEventListener('input', updateHeadline);
     fontSizeSlider.addEventListener('input', updateFontSize);
+    imageUpload.addEventListener('change', handleImageUpload);
+    imageUrlInput.addEventListener('input', handleImageUrl);
+    logoUpload.addEventListener('change', handleLogoUpload);
+    logoUrlInput.addEventListener('input', handleLogoUrl);
 
     colorOptions.forEach(option => {
       option.addEventListener('click', () => updateBrandColor(option.dataset.color));
@@ -494,6 +571,91 @@
     });
 
     // Functions
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentImage = e.target.result;
+          updateCardImage();
+          updateUploadButton('imageUpload', file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleImageUrl() {
+      const url = imageUrlInput.value.trim();
+      if (url) {
+        currentImage = url;
+        updateCardImage();
+      } else {
+        currentImage = null;
+        updateCardImage();
+      }
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          currentLogo = e.target.result;
+          updateCardLogo();
+          updateUploadButton('logoUpload', file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleLogoUrl() {
+      const url = logoUrlInput.value.trim();
+      if (url) {
+        currentLogo = url;
+        updateCardLogo();
+      } else {
+        currentLogo = null;
+        updateCardLogo();
+      }
+    }
+
+    function updateCardImage() {
+      if (currentImage) {
+        cardImage.style.backgroundImage = `url(${currentImage})`;
+        cardImage.style.backgroundSize = 'cover';
+        cardImage.style.backgroundPosition = 'center';
+        cardImage.textContent = '';
+      } else {
+        cardImage.style.backgroundImage = '';
+        cardImage.style.backgroundSize = '';
+        cardImage.style.backgroundPosition = '';
+        cardImage.textContent = 'ছবি';
+      }
+    }
+
+    function updateCardLogo() {
+      const logoElement = document.querySelector('.channel-logo');
+      if (currentLogo) {
+        logoElement.style.backgroundImage = `url(${currentLogo})`;
+        logoElement.style.backgroundSize = 'cover';
+        logoElement.style.backgroundPosition = 'center';
+        logoElement.textContent = '';
+      } else {
+        logoElement.style.backgroundImage = '';
+        logoElement.style.backgroundSize = '';
+        logoElement.style.backgroundPosition = '';
+        logoElement.textContent = 'আমাদের সমাজ';
+      }
+    }
+
+    function updateUploadButton(uploadId, fileName) {
+      const button = document.querySelector(`button[onclick*="${uploadId}"]`);
+      if (button) {
+        button.classList.add('has-file');
+        button.innerHTML = `<i class="fas fa-check"></i> ${fileName.substring(0, 20)}${fileName.length > 20 ? '...' : ''}`;
+      }
+    }
+
     function updateHeadline() {
       const headline = headlineInput.value || 'এখানে আপনার খবরের শিরোনাম লিখুন';
       newsTitle.textContent = headline;
@@ -598,7 +760,6 @@
         ctx.scale(scale, scale);
         
         // Get computed styles
-        const cardStyle = getComputedStyle(card);
         const brandColor = getComputedStyle(document.documentElement).getPropertyValue('--brand-primary').trim();
         const brandSecondary = getComputedStyle(document.documentElement).getPropertyValue('--brand-secondary').trim();
         
@@ -606,79 +767,139 @@
         ctx.fillStyle = '#f8f9fa';
         ctx.fillRect(0, 0, rect.width, rect.height);
         
-        // Draw header section
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(20, 20, 80, 80);
-        ctx.fillStyle = '#666666';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('আমাদের সমাজ', 60, 65);
+        // Function to draw image
+        const drawImage = (imageSrc, x, y, width, height, isRounded = false) => {
+          return new Promise((resolve) => {
+            if (!imageSrc) {
+              resolve();
+              return;
+            }
+            
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+              ctx.save();
+              if (isRounded) {
+                ctx.beginPath();
+                ctx.roundRect(x, y, width, height, 12);
+                ctx.clip();
+              }
+              ctx.drawImage(img, x, y, width, height);
+              ctx.restore();
+              resolve();
+            };
+            img.onerror = () => resolve();
+            img.src = imageSrc;
+          });
+        };
         
-        // Draw date tag
-        ctx.fillStyle = brandColor;
-        ctx.fillRect(rect.width - 150, 20, 120, 35);
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '14px Arial';
-        ctx.fillText('১৫ জুলাই, ২০২৫', rect.width - 90, 42);
-        
-        // Draw image placeholder
-        ctx.fillStyle = '#f0f0f0';
-        ctx.fillRect(20, 120, rect.width - 40, 250);
-        ctx.fillStyle = '#666666';
-        ctx.font = '18px Arial';
-        ctx.fillText('ছবি', rect.width / 2, 250);
-        
-        // Draw content background
-        const gradient = ctx.createLinearGradient(0, 390, rect.width, 390);
-        gradient.addColorStop(0, brandColor);
-        gradient.addColorStop(1, brandSecondary);
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 390, rect.width, 120);
-        
-        // Draw headline
-        ctx.fillStyle = '#ffffff';
-        ctx.font = `bold ${fontSizeSlider.value}px Arial`;
-        ctx.textAlign = 'center';
-        
-        const headline = newsTitle.textContent;
-        const words = headline.split(' ');
-        let line = '';
-        let y = 430;
-        const maxWidth = rect.width - 40;
-        
-        for (let n = 0; n < words.length; n++) {
-          const testLine = line + words[n] + ' ';
-          const metrics = ctx.measureText(testLine);
-          const testWidth = metrics.width;
-          
-          if (testWidth > maxWidth && n > 0) {
-            ctx.fillText(line, rect.width / 2, y);
-            line = words[n] + ' ';
-            y += parseInt(fontSizeSlider.value) + 5;
-          } else {
-            line = testLine;
+        // Draw all elements
+        Promise.all([
+          // Draw logo
+          currentLogo ? drawImage(currentLogo, 20, 20, 80, 80, true) : Promise.resolve(),
+          // Draw main image
+          currentImage ? drawImage(currentImage, 20, 120, rect.width - 40, 250, true) : Promise.resolve()
+        ]).then(() => {
+          // Draw logo background if no logo
+          if (!currentLogo) {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(20, 20, 80, 80);
+            ctx.fillStyle = '#666666';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('আমাদের সমাজ', 60, 65);
           }
-        }
-        ctx.fillText(line, rect.width / 2, y);
-        
-        // Draw footer
-        ctx.fillStyle = brandSecondary;
-        ctx.fillRect(0, 510, rect.width, 60);
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '16px Arial';
-        ctx.fillText('🌐 বিস্তারিত পড়ুন: amadersomaj.com', rect.width / 2, 545);
-        
-        resolve(canvas);
+          
+          // Draw date tag
+          ctx.fillStyle = brandColor;
+          ctx.fillRect(rect.width - 150, 20, 120, 35);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '14px Arial';
+          ctx.fillText('১৫ জুলাই, ২০২৫', rect.width - 90, 42);
+          
+          // Draw image placeholder if no image
+          if (!currentImage) {
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(20, 120, rect.width - 40, 250);
+            ctx.fillStyle = '#666666';
+            ctx.font = '18px Arial';
+            ctx.fillText('ছবি', rect.width / 2, 250);
+          }
+          
+          // Draw content background
+          const gradient = ctx.createLinearGradient(0, 390, rect.width, 390);
+          gradient.addColorStop(0, brandColor);
+          gradient.addColorStop(1, brandSecondary);
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 390, rect.width, 120);
+          
+          // Draw headline
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${fontSizeSlider.value}px Arial`;
+          ctx.textAlign = 'center';
+          
+          const headline = newsTitle.textContent;
+          const words = headline.split(' ');
+          let line = '';
+          let y = 430;
+          const maxWidth = rect.width - 40;
+          
+          for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            const metrics = ctx.measureText(testLine);
+            const testWidth = metrics.width;
+            
+            if (testWidth > maxWidth && n > 0) {
+              ctx.fillText(line, rect.width / 2, y);
+              line = words[n] + ' ';
+              y += parseInt(fontSizeSlider.value) + 5;
+            } else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line, rect.width / 2, y);
+          
+          // Draw footer
+          ctx.fillStyle = brandSecondary;
+          ctx.fillRect(0, 510, rect.width, 60);
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '16px Arial';
+          ctx.fillText('🌐 বিস্তারিত পড়ুন: amadersomaj.com', rect.width / 2, 545);
+          
+          resolve(canvas);
+        }).catch(reject);
       });
     }
 
     function resetCard() {
       headlineInput.value = 'এখানে আপনার খবরের শিরোনাম লিখুন';
+      imageUrlInput.value = '';
+      logoUrlInput.value = '';
+      imageUpload.value = '';
+      logoUpload.value = '';
+      currentImage = null;
+      currentLogo = null;
       fontSizeSlider.value = 32;
+      
       updateHeadline();
       updateFontSize();
+      updateCardImage();
+      updateCardLogo();
       updateBrandColor('#dc2626');
       applyTemplate('default');
+      
+      // Reset upload buttons
+      const imageBtn = document.querySelector('button[onclick*="imageUpload"]');
+      const logoBtn = document.querySelector('button[onclick*="logoUpload"]');
+      if (imageBtn) {
+        imageBtn.classList.remove('has-file');
+        imageBtn.innerHTML = '<i class="fas fa-upload"></i> ছবি আপলোড করুন';
+      }
+      if (logoBtn) {
+        logoBtn.classList.remove('has-file');
+        logoBtn.innerHTML = '<i class="fas fa-upload"></i> লোগো আপলোড করুন';
+      }
+      
       showNotification('কার্ড রিসেট করা হয়েছে', 'success');
     }
 
