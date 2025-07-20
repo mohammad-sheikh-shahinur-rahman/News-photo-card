@@ -99,8 +99,8 @@
     }
 
     .logo-container {
-      width: 80px;
-      height: 80px;
+      width: 90px;
+      height: 90px;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       display: flex;
@@ -112,8 +112,8 @@
     }
 
     .logo-container img {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       object-fit: contain;
       border-radius: 12px;
     }
@@ -1007,20 +1007,28 @@
             ctx.fillText('আমাদের', 120, 110);
             ctx.fillText('সমাজ', 120, 145);
           }
-          
-          // Draw date tag
-          const dateGradient = ctx.createLinearGradient(size - 320, 40, size - 40, 120);
-          dateGradient.addColorStop(0, brandColor);
-          dateGradient.addColorStop(1, brandSecondary);
-          ctx.fillStyle = dateGradient;
-          ctx.beginPath();
-          ctx.roundRect(size - 320, 40, 280, 80, 40);
-          ctx.fill();
-          
-          ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 32px Arial';
-          ctx.textAlign = 'center';
-          ctx.fillText('১৫ জুলাই, ২০২৫', size - 180, 90);
+      // Draw date tag
+const dateGradient = ctx.createLinearGradient(size - 320, 40, size - 40, 120);
+dateGradient.addColorStop(0, brandColor);
+dateGradient.addColorStop(1, brandSecondary);
+ctx.fillStyle = dateGradient;
+ctx.beginPath();
+ctx.roundRect(size - 320, 40, 280, 80, 40);
+ctx.fill();
+
+// Generate dynamic Bengali date
+const today = new Date();
+const weekday = today.toLocaleDateString('bn-BD', { weekday: 'long' });  // eg: রবিবার
+const day = today.toLocaleDateString('bn-BD', { day: 'numeric' });       // eg: ২০
+const month = today.toLocaleDateString('bn-BD', { month: 'long' });      // eg: জুলাই
+const year = today.toLocaleDateString('bn-BD', { year: 'numeric' });     // eg: ২০২৫
+
+const bengaliDate = `${weekday}, ${day} ${month}, ${year}`; // রবিবার, ২০ জুলাই, ২০২৫
+
+ctx.fillStyle = '#ffffff';
+ctx.font = 'bold 28px Arial';
+ctx.textAlign = 'center';
+ctx.fillText(bengaliDate, size - 180, 90);
           
           // Draw image placeholder if no image
           if (!currentImage || currentImage === '') {
