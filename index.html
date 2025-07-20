@@ -126,17 +126,22 @@
       line-height: 1.2;
     }
 
-    .date-tag {
-      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-      color: white;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 16px;
-      box-shadow: var(--shadow-light);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-    }
+   .date-tag {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: var(--shadow-light);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  white-space: nowrap; /* টেক্সট এক লাইনে রাখতে */
+  overflow: hidden; /* অতিরিক্ত টেক্সট লুকাতে */
+  text-overflow: ellipsis; /* অতিরিক্ত টেক্সট হলে ... দেখাতে */
+}
+
 
     .main-image-container {
       width: 100%;
